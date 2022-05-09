@@ -43,7 +43,7 @@ function getNextWords(){
     inputs.forEach((id,index)=>{
         const text = document.getElementById(id).value
         if(text){
-            const match = document.getElementById(id+'-match-type').checked
+            const match = document.getElementById(id+'-match-type').value
             arr.push({
                 letter: text,
                 exact: match
@@ -69,12 +69,13 @@ function filterNextWords(words, arr){
         for(let i=0; i<5; i++){
             const match = arr[i]
             if(match.letter){
+                debugger
                 // Try to check
-                if(match.exact){
+                if(match.exact === '1'){
                     if(word.text[i] !== match.letter){
                         add = false
                     }
-                }else{
+                }else if(match.exact === '2'){
                     let looseMatchAnywhere = false
                     for(let y=0;y < 5; y++){
                         if(word.text[y] === match.letter){
@@ -82,6 +83,14 @@ function filterNextWords(words, arr){
                         }
                     }
                     if(!looseMatchAnywhere) add = false
+                } else if(match.exact === '3'){
+                    let noMatch = true
+                    for(let y=0;y < 5; y++){
+                        if(word.text[y] === match.letter){
+                            noMatch = false
+                        }
+                    }
+                    if(!noMatch) add = false
                 }
             }
         }
