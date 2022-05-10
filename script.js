@@ -38,6 +38,7 @@ function initStep2(){
 }
 
 function getNextWords(){
+    const excludeWords = document.getElementById('older-letters').value
     const arr = []
     const inputs = ['first-letter','second-letter', 'third-letter', 'fourth-letter', 'fifth-letter']
     inputs.forEach((id,index)=>{
@@ -58,13 +59,13 @@ function getNextWords(){
 
     console.log(arr)
 
-    const words = filterNextWords(applicableWords, arr)
+    const words = filterNextWords(applicableWords, arr, excludeWords)
     console.log(words)
     renderWords(words, 'best-next-words-list')
 }
 
-function filterNextWords(words, arr){
-    return words.reduce((list,word)=>{
+function filterNextWords(words, arr, excludeWords){
+    return words.reduce((list, word)=>{
         let add = true
         for(let i=0; i<5; i++){
             const match = arr[i]
@@ -94,6 +95,12 @@ function filterNextWords(words, arr){
                 }
             }
         }
+        add = add ? excludeWords.split('').reduce((res, letter)=>{
+            if(word.text.includes(letter)){
+                res = false
+            }
+            return res
+        }, true) : add
         if(add){
             list.push({
                 text: word.text
